@@ -1,0 +1,3 @@
+<DataGrid.InputBindings>
+    <KeyBinding Key="Delete" Command="{StaticResource deletePledgeCommend}"/>
+</DataGrid.InputBindings>   

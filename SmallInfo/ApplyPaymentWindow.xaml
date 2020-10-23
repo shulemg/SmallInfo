@@ -1,0 +1,97 @@
+﻿<Window x:Class="SmallInfo.ApplyPaymentWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:SmallInfo"
+        mc:Ignorable="d"
+        Title="ApplyPaymentWindow" Height="700" Width="1000">
+    <Window.Resources>
+        <Style TargetType="TextBlock">
+            <Setter Property="FontSize" Value="20"/>
+        </Style>
+    </Window.Resources>
+    <Grid Name="ApplyGrid">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="1*"/>
+            <RowDefinition Height="1*"/>
+            <RowDefinition Height="1*"/>
+            <RowDefinition Height="6*"/>
+            <RowDefinition Height="6*"/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="1*"/>
+            <ColumnDefinition Width="1*"/>
+            <ColumnDefinition Width="2*"/>
+        </Grid.ColumnDefinitions>
+        <TextBlock Grid.Column="0" Grid.Row="0" Text="Total Amount" VerticalAlignment="Center" Margin="5"/>
+        <TextBlock Name="TotalAmountTB" Grid.Column="1" Grid.Row="0" VerticalAlignment="Center"/>
+        <TextBlock Grid.Column="0" Grid.Row="1" Text="Applied Amount" VerticalAlignment="Center" Margin="5"/>
+        <TextBlock Name="AppliedAmountTB" Grid.Column="1" Grid.Row="1" VerticalAlignment="Center"/>
+        <TextBlock Grid.Column="0" Grid.Row="2" Text="Remaining Amount" VerticalAlignment="Center" Margin="5"/>
+        <TextBlock Name="RemainingAmountTB" Grid.Column="1" Grid.Row="2" VerticalAlignment="Center"/>
+        <Grid Grid.Column="2" Grid.Row="2">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="1*"/>
+                <ColumnDefinition Width="1*"/>
+                <ColumnDefinition Width="1*"/>
+                <ColumnDefinition Width="1*"/>
+            </Grid.ColumnDefinitions>
+            <Button Name="FinishedButton" Content="Finished" Margin="5" Grid.Column="0" Click="FinishedButton_Click"/>
+            <Button Content="Remove All" Margin="5" Grid.Column="1"/>
+            <Button Name="autoApplyButton" Content="Auto Apply" Margin="5" Grid.Column="2" Click="autoApplyButton_Click"/>
+            <Button Name="createChargeButton" Content="Create Charge" Margin="5" Grid.Column="3" Click="createChargeButton_Click"/>
+        </Grid>
+        <Border Grid.Row="3" Grid.ColumnSpan="3" Margin="5" BorderBrush="Gray" BorderThickness="2">
+            <StackPanel>
+                <TextBlock Text="Payment Applied To:" HorizontalAlignment="Center" FontSize="14" FontWeight="Bold" />
+                <DataGrid Name="AppliedToDataGrid" AutoGenerateColumns="False" ItemsSource="{Binding Applies}" IsReadOnly="True">
+                    <DataGrid.Columns>
+                        <DataGridTextColumn Header="Charge #" Width="75" Binding="{Binding PledgeId}"/>
+                        <DataGridTemplateColumn Header="Remove" Width="65">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <Button Name="RemoveButton" Content="Remove" Click="RemoveButton_Click"/>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+                        <DataGridTextColumn Header="Applied" Width="75" Binding="{Binding ApplyAmount}"/>
+                        <DataGridTextColumn Header="Campaign" Width="120" Binding="{Binding pledge.Campaign}"/>
+                        <DataGridTextColumn Header="Date" Width="75"  Binding="{Binding pledge.DateEnterd}"/>
+                        <DataGridTextColumn Header="Amount" Width="75"  Binding="{Binding pledge.Amount}"/>
+                        <DataGridTextColumn Header="Paid" Width="75"  Binding="{Binding pledge.PaidString}"/>
+                        <DataGridTextColumn Header="Balance" Width="75"  Binding="{Binding pledge.BalanceString}"/> 
+                    </DataGrid.Columns>
+                </DataGrid>
+            </StackPanel>
+        </Border>
+        <Border Grid.Row="4" Grid.ColumnSpan="3" Margin="5" BorderBrush="Gray" BorderThickness="2">
+            <StackPanel>
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition/>
+                    </Grid.ColumnDefinitions>
+                    <TextBlock Text="Apply Payment To:" HorizontalAlignment="Center" FontSize="14" FontWeight="Bold" />
+                    <Button Name="AllCampaignsButton" Content="All Campaigns" HorizontalAlignment="Right" Margin="0,0,40,0" BorderBrush="#FF9FE1FB" BorderThickness="2" Click="AllCampaignsButton_Click"/>
+                </Grid>
+                <DataGrid Name="ApplyDataGrid" ItemsSource="{Binding PledgesW_Balance}" AutoGenerateColumns="False" IsReadOnly="True" MaxHeight="225">
+                    <DataGrid.Columns>
+                        <DataGridTextColumn Header="Charge #" Width="75" Binding="{Binding PledgeId}"/>
+                        <DataGridTemplateColumn Header="Apply" Width="65">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <Button Name="ApplyButton" Content="Apply" Click="ApplyButton_Click"/>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+                        <DataGridTextColumn Header="Campaign" Width="120" Binding="{Binding Campaign}"/>
+                        <DataGridTextColumn Header="Date" Width="75"  Binding="{Binding DateEnterd}"/>
+                        <DataGridTextColumn Header="Amount" Width="75"  Binding="{Binding Amount}"/>
+                        <DataGridTextColumn Header="Paid" Width="75"  Binding="{Binding PaidString}"/>
+                        <DataGridTextColumn Header="Balance" Width="75"  Binding="{Binding BalanceString}"/>
+                    </DataGrid.Columns>
+                </DataGrid>
+            </StackPanel>
+        </Border>
+    </Grid>
+</Window>

@@ -1,0 +1,36 @@
+                    <ListView Name="PhoneListView" NumberSubstitution.Substitution="European" Grid.Column="0" Grid.Row="2" Grid.ColumnSpan="4" Margin="5" Grid.RowSpan="2" ItemsSource="{Binding Phones}">
+                        <ListView.View>
+                            <GridView x:Name="PhoneGridView">
+                                <GridViewColumn Width="25">
+                                    <GridViewColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <Button Content="X" Foreground="Red" HorizontalAlignment="Center"/>
+                                        </DataTemplate>
+                                    </GridViewColumn.CellTemplate>
+                                </GridViewColumn>
+                                <GridViewColumn Header="Desc" Width="125">
+                                    <GridViewColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <ComboBox MinWidth="100" FontSize="16" HorizontalAlignment="Center" Text="{Binding Type}"/>
+                                        </DataTemplate>
+                                    </GridViewColumn.CellTemplate>
+                                </GridViewColumn>
+                                <GridViewColumn Header="Number" Width="200">
+                                    <GridViewColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <TextBox MinWidth="180" FontSize="18" Text="{Binding Number}"/>
+                                        </DataTemplate>
+                                    </GridViewColumn.CellTemplate>
+                                </GridViewColumn>
+                                <GridViewColumn Header="Default" Width="55">
+                                    <GridViewColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <Grid Width="45">
+                                                <CheckBox HorizontalAlignment="Center" IsChecked="{Binding IsDefault}"/>
+                                            </Grid>
+                                        </DataTemplate>
+                                    </GridViewColumn.CellTemplate>
+                                </GridViewColumn>
+                            </GridView>
+                        </ListView.View>
+                    </ListView>

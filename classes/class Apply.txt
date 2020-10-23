@@ -1,0 +1,17 @@
+namespace SmallInfo.Data
+{
+    using System;
+    using System.Collections.Generic;
+
+    public partial class Apply
+    {
+        public int ApplyId { get; set; }
+        public decimal ApplyAmount { get; set; }
+        public int PledgeId { get; set; }
+        public int PaymentId { get; set; }
+
+        public virtual Payment Payment { get; set; }
+
+        public Pledge pledge { get; set; }
+    }
+}

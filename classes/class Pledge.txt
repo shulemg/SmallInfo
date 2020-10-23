@@ -1,0 +1,44 @@
+namespace SmallInfo.Data
+{
+    using System;
+    using System.Collections.Generic;
+
+    public partial class Pledge
+    {
+
+        public Pledge()
+        {
+            Payments = new List<Apply>();
+        }
+        public int PledgeId { get; set; }
+        public string Campaign { get; set; }
+        public int AccountId { get; set; }
+        public decimal Amount { get; set; }
+        public Nullable<System.DateTime> DateEnterd { get; set; }
+        public string Note { get; set; }
+        public Nullable<bool> Detail { get; set; }
+
+        public virtual Account Account { get; set; }
+
+        public List<Apply> Payments { get; set; }
+
+        public string PledgeString { get { return Campaign + " " + Amount.ToString("C"); } }
+        public string PaidString { get { Paid_Balance(); return paid.ToString("C"); } }
+        public string BalanceString { get { return Balance.ToString("C"); } }
+        private decimal paid;
+        public decimal Balance { get { Paid_Balance(); return balance; } }
+        private decimal balance;
+        public decimal Running { get; set; }
+
+        void Paid_Balance()
+        {
+            paid = 0;
+            balance = Amount;
+            foreach (Apply payment in Payments)
+            {
+                paid += payment.ApplyAmount;
+                balance -= payment.ApplyAmount;
+            }
+        }
+    }
+}

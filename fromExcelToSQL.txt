@@ -1,0 +1,147 @@
+public void exportToDataBase()
+        {
+            Excel.Application xlApll;
+            Excel.Workbook xlWoorkbook;
+            Excel.Worksheet xlWoorksheet;
+            Excel.Range xlRange;
+
+            xlApll = new Excel.Application();
+            xlWoorkbook = xlApll.Workbooks.Add(@"C:\Users\abraham.ABRAHAM\Desktop\Book1.xlsx");
+            xlWoorksheet = xlWoorkbook.Worksheets.Item[1];
+            xlRange = xlWoorksheet.UsedRange;
+
+            int rowCount = xlRange.Rows.Count;
+            int colCount = xlRange.Columns.Count;
+
+            int accountid = 5000;
+            int addressid = 5012;
+            int phoneid = 10021;
+
+            for (int i = 3001; i <= rowCount; i++)
+            {
+                //try
+                //{
+
+                
+                Account account = new Account();
+                account.AccountId = accountid;
+                if (xlRange.Cells[i, 6] != null && xlRange.Cells[i, 6].Value2 != null)
+                {
+                    account.HNameTitle = xlRange.Cells[i, 6].Value2.ToString();
+                    if (account.HNameTitle.Length == 4)
+                    {
+                        account.HNameTitle = account.HNameTitle.Remove(2, 1);
+                        account.HNameTitle = account.HNameTitle.Insert(2, "'");
+                    }
+                    else if (account.HNameTitle.Length == 5)
+                    {
+                        account.HNameTitle = account.HNameTitle.Remove(3, 1);
+                        account.HNameTitle = account.HNameTitle.Insert(3, "'");
+                    }
+                }
+                if (xlRange.Cells[i, 10] != null && xlRange.Cells[i, 10].Value2 != null)
+                    account.HFirstName = xlRange.Cells[i, 10].Value2.ToString();
+                if (xlRange.Cells[i, 12] != null && xlRange.Cells[i, 12].Value2 != null)
+                    account.HLastName = xlRange.Cells[i, 12].Value2.ToString();
+                if (xlRange.Cells[i, 7] != null && xlRange.Cells[i, 7].Value2 != null)
+                {
+                    account.HNameEnd = xlRange.Cells[i, 7].Value2.ToString();
+                    if(account.HNameEnd.Length == 4)
+                    {
+                        account.HNameEnd = account.HNameEnd.Remove(2);
+                        account.HNameEnd = account.HNameEnd.Insert(2, "'");
+                    }
+                }
+                if (xlRange.Cells[i, 5] != null && xlRange.Cells[i, 5].Value2 != null)
+                    account.NameTitle = xlRange.Cells[i, 5].Value2.ToString();
+                if (xlRange.Cells[i, 9] != null && xlRange.Cells[i, 9].Value2 != null)
+                    account.FirstName = xlRange.Cells[i, 9].Value2.ToString();
+                if (xlRange.Cells[i, 11] != null && xlRange.Cells[i, 11].Value2 != null)
+                    account.LastName = xlRange.Cells[i, 11].Value2.ToString();
+
+                smallInfoEntities.Accounts.Add(account);
+
+                Address address = new Address();
+                address.AccountId = accountid;
+                address.AddressId = addressid;
+                if (xlRange.Cells[i, 14] != null && xlRange.Cells[i, 14].Value2 != null)
+                    address.Address1 = xlRange.Cells[i, 14].Value2.ToString();
+                if (xlRange.Cells[i, 21] != null && xlRange.Cells[i, 21].Value2 != null)
+                    address.AptNum = xlRange.Cells[i, 21].Value2.ToString();
+                if (xlRange.Cells[i, 15] != null && xlRange.Cells[i, 15].Value2 != null)
+                    address.City = xlRange.Cells[i, 15].Value2.ToString();
+                if (xlRange.Cells[i, 16] != null && xlRange.Cells[i, 16].Value2 != null)
+                    address.State = xlRange.Cells[i, 16].Value2.ToString();
+                if (xlRange.Cells[i, 17] != null && xlRange.Cells[i, 17].Value2 != null)
+                    address.Zip = xlRange.Cells[i, 17].Value2.ToString();
+                if (xlRange.Cells[i, 18] != null && xlRange.Cells[i, 18].Value2 != null)
+                    address.Zip += " " + xlRange.Cells[i, 18].Value2.ToString();
+                if (xlRange.Cells[i, 19] != null && xlRange.Cells[i, 19].Value2 != null)
+                    address.Location = xlRange.Cells[i, 19].Value2.ToString();
+
+                smallInfoEntities.Addresses.Add(address);
+
+                if(xlRange.Cells[i, 1] != null && xlRange.Cells[i, 1].Value2 != null)
+                {
+                    Phone phone = new Phone();
+                    phone.PhoneId = phoneid;
+                    phoneid++;
+                    phone.AccountId = accountid;
+                    phone.Number = xlRange.Cells[i, 1].Value2.ToString();
+                    phone.Type = "Home";
+
+                    smallInfoEntities.Phones.Add(phone);
+                }
+                if (xlRange.Cells[i, 2] != null && xlRange.Cells[i, 2].Value2 != null)
+                {
+                    Phone phone = new Phone();
+                    phone.PhoneId = phoneid;
+                    phoneid++;
+                    phone.AccountId = accountid;
+                    phone.Number = xlRange.Cells[i, 2].Value2.ToString();
+                    phone.Type = "Cell";
+
+                    smallInfoEntities.Phones.Add(phone);
+                }
+                if (xlRange.Cells[i, 3] != null && xlRange.Cells[i, 3].Value2 != null)
+                {
+                    Phone phone = new Phone();
+                    phone.PhoneId = phoneid;
+                    phoneid++;
+                    phone.AccountId = accountid;
+                    phone.Number = xlRange.Cells[i, 3].Value2.ToString();
+                    phone.Type = "Work";
+
+                    smallInfoEntities.Phones.Add(phone);
+                }
+                accountid++;
+                addressid++;
+                round++;
+                    if (round == 1000)
+                        saveChanges();
+
+                    //string str = (xlRange.Cells[i, 7].Value2.ToString());
+                    //int le = str.Length;
+                //}
+                //catch (Exception ex)
+                //{
+
+                //    MessageBox.Show(ex.Message + "\n row number " + round.ToString(),"Reading from Excel ERROR!");
+                //}
+                
+            }
+            saveChanges();
+
+            xlWoorkbook.Close();
+            xlApll.Quit();
+
+            MessageBox.Show("Finish ? YES !");
+        }
+        void saveChanges()
+        {
+            
+                smallInfoEntities.SaveChanges();
+                MessageBox.Show("saved Changes");
+                round = 0;
+            
+        }

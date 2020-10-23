@@ -1,0 +1,149 @@
+﻿<Window x:Class="SmallInfo.Desktop.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:SmallInfo.Desktop"
+        mc:Ignorable="d"
+        Title="MainWindow" Height="700" Width="1250">
+    <Window.Resources>
+        <DataTemplate x:Key="TabItemHeader">
+            <Grid Margin="5">
+                <Border Background="#FFDDF7DD" CornerRadius="20,20,0,0"/>
+                <TextBlock
+                Text="{Binding}"
+                FontSize="18"
+                FontStyle="Italic"/>
+            </Grid>
+        </DataTemplate>
+        <Style TargetType="DataGrid">
+            <Setter Property="Background" Value="White"/>
+            <Setter Property="AlternationCount" Value="2"/>
+            <Setter Property="AlternatingRowBackground" Value="#FFE5F9FD"/>
+            <Setter Property="AutoGenerateColumns" Value="False"/>
+        </Style>
+        <DataTemplate x:Key="DocumentTemplateOne">
+            <Grid Width="850" Height="1100">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition/>
+                </Grid.RowDefinitions>
+                <TextBlock/>
+                <DataGrid Width="650" Grid.Row="1" FlowDirection="RightToLeft">
+                    <DataGrid.Columns>
+                        <DataGridTextColumn Header="נאמען" Binding="{Binding Name}"/>
+                        <DataGridTextColumn Header="אדרעס"  Binding="{Binding Address}"/>
+                        <DataGridTextColumn Header="קבלה"  Binding="{Binding Amount}"/>
+                        <DataGridTextColumn Header="שילם" Binding="{Binding Paid}"/>
+                        <DataGridTextColumn Header="חייב" Binding="{Binding Balance}"/>
+                        <DataGridTextColumn Header="ס'ה חייב" Binding="{Binding TotalBalance}"/>
+                    </DataGrid.Columns>
+                </DataGrid>
+            </Grid>
+        </DataTemplate>
+    </Window.Resources>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition/>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+            <StackPanel>
+                <StackPanel Orientation="Horizontal">
+                    <Label Margin="5" Content="From" Width="40"/>
+                    <DatePicker Margin="5"/>
+                </StackPanel>
+                <StackPanel Orientation="Horizontal">
+                    <Label Margin="5" Content="To" Width="40"/>
+                    <DatePicker Margin="5"/>
+                </StackPanel>
+            </StackPanel>
+            <ListBox Grid.Column="2" Width="150" Margin="5,0"/>
+            <StackPanel Grid.Column="3">
+                <Button Width="100" Margin="2.5" Content="Expend" Height="30"/>
+                <Button Width="100" Margin="2.5" Content="Clear Selection" Height="30"/>
+            </StackPanel>
+        </Grid>
+        <TabControl Grid.Row="1">
+            <TabItem Header="Reports" HeaderTemplate="{StaticResource TabItemHeader}">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition/>
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition/>
+                        <ColumnDefinition/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+                    <StackPanel Orientation="Horizontal">
+                        <Button Margin="5" Content="Print" Width="50"/>
+                        <Button Margin="5" Content="Clear" Width="50"/>
+                    </StackPanel>
+                    <ComboBox Grid.Column="1" Margin="5"/>
+                    <ComboBox Grid.Column="2" Margin="5"/>
+                    <Button Grid.Column="3" Margin="5" Content="View" Width="50"/>
+                    <Grid Grid.Row="1" Grid.ColumnSpan="4">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition/>
+                        </Grid.RowDefinitions>
+                        <TextBlock/>
+                        <DataGrid Width="650" Grid.Row="1" FlowDirection="RightToLeft" RowHeight="50">
+                            <DataGrid.Columns>
+                                <DataGridTextColumn Header="נאמען" Width="175"/>
+                                <DataGridTextColumn Header="אדרעס" Width="175"/>
+                                <DataGridTextColumn Header="קבלה" Width="75"/>
+                                <DataGridTextColumn Header="שילם" Width="75"/>
+                                <DataGridTextColumn Header="חייב" Width="75"/>
+                                <DataGridTextColumn Header="ס'ה חייב" Width="75"/>
+                            </DataGrid.Columns>
+                        </DataGrid>
+                    </Grid>
+                </Grid>
+            </TabItem>
+            <TabItem Header="Statements" HeaderTemplate="{StaticResource TabItemHeader}">
+
+            </TabItem>
+            <TabItem Header="Receipts" HeaderTemplate="{StaticResource TabItemHeader}">
+
+            </TabItem>
+            <TabItem Header="Querys" HeaderTemplate="{StaticResource TabItemHeader}">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition/>
+                        <RowDefinition/>
+                    </Grid.RowDefinitions>
+                    <TextBlock Grid.Row="0"/>
+                    <TabControl Grid.Row="1">
+                        <TabItem Header="General Info">
+                            <ListBox Name="GeneralInfoListBox" />
+                        </TabItem>
+                        <TabItem>
+
+                        </TabItem>
+                        <TabItem>
+
+                        </TabItem>
+                        <TabItem>
+
+                        </TabItem>
+                        <TabItem>
+
+                        </TabItem>
+                        <TabItem>
+
+                        </TabItem>
+                    </TabControl>
+                </Grid>
+            </TabItem>
+        </TabControl>
+    </Grid>
+</Window>

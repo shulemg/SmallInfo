@@ -1,0 +1,39 @@
+namespace SmallInfo.Data
+{
+    using System;
+    using System.Collections.Generic;
+    using System.Collections.ObjectModel;
+
+    public partial class Payment
+    {
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
+        public Payment()
+        {
+            this.Applies = new ObservableCollection<Apply>();
+        }
+
+        public int PaymentId { get; set; }
+        public Nullable<int> PledgeId { get; set; }
+        public decimal Amount { get; set; }
+        public Nullable<System.DateTime> Date { get; set; }
+        public string Type { get; set; }
+        public string Note { get; set; }
+        public int AccountId { get; set; }
+        public string PaymentCampaign { get; set; }
+
+        public Pledge pledge { get; set; }
+        public bool IsAmount { get { if (Amount > 0) return true; else return false; } }
+        public object Amount_String { get { return Amount.ToString("C"); } set { setAmount(value.ToString()); } }
+
+        void setAmount(string _amount)
+        {
+            decimal amount = 0;
+            if (decimal.TryParse(_amount, out amount))
+                Amount = amount;
+        }
+
+        public virtual Account Account { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Apply> Applies { get; set; }
+    }
+}

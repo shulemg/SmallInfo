@@ -1,0 +1,350 @@
+﻿<Window x:Class="SmallInfo.GeneralInfo"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:SmallInfo"
+        mc:Ignorable="d"
+        Title="GeneralInfo" Height="1700" Width="3000">
+    <Window.Resources>
+        <Style TargetType="TextBlock">
+            <Setter Property="FontSize" Value="16"/>
+            <Setter Property="HorizontalAlignment" Value="Center"/>
+            <Setter Property="Margin" Value="5"/>
+        </Style>
+        <Style TargetType="ComboBox">
+            <Setter Property="IsEditable" Value="True"/>
+            <Setter Property="Background" Value="LightSeaGreen"/>
+            <Setter Property="FontSize" Value="16"/>
+            <Setter Property="VerticalAlignment" Value="Center"/>
+        </Style>
+        <Style TargetType="ListViewItem">
+            <Style.Triggers>
+                <Trigger Property="ItemsControl.AlternationIndex"  Value="0">
+                    <Setter Property="Background" Value="#FFEBFBD8" />
+                </Trigger>
+                <Trigger Property="ItemsControl.AlternationIndex"  Value="1">
+                    <Setter Property="Background" Value="#FFE5F9FD" />
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+        <Style TargetType="ListView">
+            <Setter Property="AlternationCount" Value="2"/>
+        </Style>
+        <Style TargetType="DataGrid" x:Key="MyDataGrid" x:Name="mydata">
+            <Setter Property="Background" Value="#FFEBFBD8"/>
+            <Setter Property="AlternationCount" Value="2"/>
+            <Setter Property="AlternatingRowBackground" Value="#FFE5F9FD"/>
+            <Setter Property="AutoGenerateColumns" Value="False"/>
+        </Style>
+        <Style TargetType="DataGrid">
+            <Setter Property="FontSize" Value="16"/>
+        </Style>
+        <DataTemplate x:Key="TabItemHeader">
+            <Grid Margin="5">
+                <Border Background="#FFDDF7DD" CornerRadius="20,20,0,0"/>
+                <TextBlock
+                Text="{Binding}"
+                FontSize="24"
+                FontStyle="Italic"/>
+            </Grid>
+        </DataTemplate>
+        <DataTemplate x:Key="PledgeCampaignDataTemplate" x:Name="PledgeCampaignDataTemplate" DataType="Campaigns">
+            <ComboBox Name="PledgeCampainComboBox" Text="{Binding Campaign}" MinWidth="200" IsEditable="True" IsReadOnly="True" DisplayMemberPath="Campaign1" Loaded="PledgeCampainComboBox_Loaded"/>
+        </DataTemplate>
+        <DataTemplate x:Key="PledgeNoteDataTemplate" x:Name="PledgeNoteDataTemplate">
+            <ComboBox Name="PledgeNoteComboBox" Text="{Binding Note}" MinWidth="200" DisplayMemberPath="Note1" IsEditable="True" IsReadOnly="True" Loaded="PledgeNoteComboBox_Loaded"/>
+        </DataTemplate>
+        <DataTemplate x:Key="AccountLocationDataTemplate">
+            <ComboBox Name="LocationComboBox" MinWidth="200" DisplayMemberPath="Location1" IsEditable="True" IsReadOnly="True" Loaded="AccountLocationComboBox_Loaded" DropDownClosed="LocationComboBox_DropDownClosed"/>
+        </DataTemplate>
+    </Window.Resources>
+    <Grid Background="#FFABC7C5" DataContext="accountManager">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="400*"/>
+            <ColumnDefinition Width="300*"/>
+            <ColumnDefinition Width="150*"/>
+            <ColumnDefinition Width="200*"/>
+            <ColumnDefinition Width="400*"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto" MinHeight="400"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+        <ComboBox Name="E_ComboBox" Grid.ColumnSpan="1" Margin="5,20" MinHeight="40" DisplayMemberPath="EComboBoxString" DropDownClosed="ComboBox_DropDownClosed">
+            <ComboBox.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <VirtualizingStackPanel/>
+                </ItemsPanelTemplate>
+            </ComboBox.ItemsPanel>
+        </ComboBox>
+        <ComboBox Grid.Column="1" MinHeight="40"/>
+        <TextBlock Name="balanceTextBlock" Grid.Column="2" Background="Azure" Margin="10,20,10,20" HorizontalAlignment="Stretch"/>
+        <ComboBox Name="DonorComboBox" Grid.Column="3" Background="RosyBrown" Height="40" DisplayMemberPath="AccountId" DropDownClosed="ComboBox_DropDownClosed">
+            <ComboBox.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <VirtualizingStackPanel/>
+                </ItemsPanelTemplate>
+            </ComboBox.ItemsPanel>
+        </ComboBox>
+        <ComboBox Name="H_ComboBox" MaxDropDownHeight="600" Grid.Column="4" Grid.ColumnSpan="1" Margin="5,20" MinHeight="40" DisplayMemberPath="HComboBoxString" FlowDirection="RightToLeft" LostFocus="HebrewControl_LostFocus" GotFocus="HebrewControl_GotFocus" DropDownClosed="ComboBox_DropDownClosed" ScrollViewer.ScrollChanged="H_ComboBox_ScrollChanged"  SelectionChanged="H_ComboBox_SelectionChanged" RequestBringIntoView="H_ComboBox_RequestBringIntoView" TextInput="H_ComboBox_TextInput" KeyDown="H_ComboBox_KeyDown">
+            <ComboBox.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <VirtualizingStackPanel/>
+                </ItemsPanelTemplate>
+            </ComboBox.ItemsPanel>
+        </ComboBox>
+
+        <Button Name="refreshButton" Grid.Row="1" Grid.Column="3" Content="Refresh" MinHeight="30" Background="#FF7BCAE8" Click="refreshButton_Click"/>
+
+        <TabControl Name="AccountsTabControl" Grid.Row="2" Grid.ColumnSpan="5" Grid.RowSpan="1" Background="#FFECFFEB" Margin="15" Unloaded="AccountsTabControl_Unloaded">
+            <TabItem Header="General Info" HeaderTemplate="{StaticResource TabItemHeader}">
+                <Grid MinHeight="100">
+                    <Grid.RowDefinitions>
+                        <RowDefinition MinHeight="50"/>
+                        <RowDefinition MinHeight="50"/>
+                        <RowDefinition MinHeight="50"/>
+                        <RowDefinition MinHeight="50"/>
+                        <RowDefinition MinHeight="50"/>
+                        <RowDefinition MinHeight="50"/>
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="1*"/>
+                        <ColumnDefinition Width="1*"/>
+                        <ColumnDefinition Width="1*"/>
+                        <ColumnDefinition Width="1*"/>
+                        <ColumnDefinition Width="1*"/>
+                        <ColumnDefinition Width="1*"/>
+                        <ColumnDefinition Width="1*"/>
+                        <ColumnDefinition Width="1*"/>
+                        <ColumnDefinition Width="1*"/>
+                        <ColumnDefinition Width="1*"/>
+                        <ColumnDefinition Width="1*"/>
+                        <ColumnDefinition Width="1*"/>
+                    </Grid.ColumnDefinitions>
+                    <TextBlock Text="First Name" Margin="5" Grid.Row="0"/>
+                    <ComboBox Name="ETitleCombo" Grid.Column="1" Margin="5" VerticalAlignment="Top" Text="{Binding NameTitle, Mode=TwoWay}"/>
+                    <ComboBox Name="EFirstNameCombo" Grid.Row="0" Grid.ColumnSpan="2" Grid.Column="2" VerticalAlignment="Top" Margin="5" Text="{Binding FirstName, Mode=TwoWay}"/>
+                    <TextBlock Grid.Column="4" Text="Last Name" Margin="5" Grid.Row="0"/>
+                    <ComboBox Name="ELastNameCombo" Grid.Column="5" Grid.ColumnSpan="2" Grid.Row="0" VerticalAlignment="Top" Margin="5" Text="{Binding LastName, Mode=TwoWay}"/>
+                    <ComboBox Name="H" Grid.Column="0" Grid.Row="1" VerticalAlignment="Top" Margin="5" FlowDirection="RightToLeft" LostFocus="HebrewControl_LostFocus" GotFocus="HebrewControl_GotFocus"/>
+                    <ComboBox Name="HLastNameCombo" Grid.ColumnSpan="2" Grid.Column="1" Grid.Row="1" FlowDirection="RightToLeft" VerticalAlignment="Top" Margin="5" Text="{Binding HLastName, Mode=TwoWay}" LostFocus="HebrewControl_LostFocus" GotFocus="HebrewControl_GotFocus"/>
+                    <TextBlock Text="לעצטע נאמען" Grid.Column="3" Grid.Row="1" Margin="5" />
+                    <ComboBox Name="HFirstNameCombo" Grid.Column="4" Grid.Row="1" Grid.ColumnSpan="2" FlowDirection="RightToLeft" VerticalAlignment="Top" Margin="5" Text="{Binding HFirstName, Mode=TwoWay}" LostFocus="HebrewControl_LostFocus" GotFocus="HebrewControl_GotFocus"/>
+                    <ComboBox Name="HTitleCombo" Grid.Row="1" Grid.Column="6" VerticalAlignment="Top" Margin="5" FlowDirection="RightToLeft" Text="{Binding HNameTitle, Mode=TwoWay}" LostFocus="HebrewControl_LostFocus" GotFocus="HebrewControl_GotFocus"/>
+                    <TextBlock Text="ערשטע נאמען" Grid.Column="7" Grid.Row="1" Margin="5"/>
+                    <DataGrid Name="PhoneDataGrid" Grid.Column="0" Grid.Row="2" Grid.ColumnSpan="4" Margin="5" Grid.RowSpan="2" AutoGenerateColumns="False" ItemsSource="{Binding Phones}" BeginningEdit="PhoneDataGrid_BeginningEdit" InitializingNewItem="PhoneDataGrid_InitializingNewItem">
+                        <DataGrid.Columns>
+                            <DataGridTemplateColumn Header="Desc">
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <ComboBox Text="{Binding Type}"/>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+                            <DataGridTextColumn Header="Number" Binding="{Binding Number}"/>
+                            <DataGridCheckBoxColumn Header="Default" Selector.IsSelected="{Binding IsDefault}"/>
+                        </DataGrid.Columns>
+                    </DataGrid>
+                    <DataGrid Name="AddressDataGrid" DataGridCell.Selected="AddressDataGrid_Selected" Grid.Row="4" Grid.RowSpan="2" SelectionMode="Single" Grid.ColumnSpan="12" AutoGenerateColumns="False" ItemsSource="{Binding Path=Addresses}" InitializingNewItem="AddressDataGrid_InitializingNewItem">
+                        <DataGrid.Columns>
+                            <DataGridCheckBoxColumn Header="Default" Selector.IsSelected="{Binding Default}"/>
+                            <DataGridTextColumn Header="Address" Binding="{Binding Address1}"/>
+                            <DataGridTextColumn Header="Apt #" Binding="{Binding AptNum}"/>
+                            <DataGridTextColumn Header="City" Binding="{Binding City}"/>
+                            <DataGridTextColumn Header="State" Binding="{Binding State}"/>
+                            <DataGridTextColumn Header="Zip" Binding="{Binding Zip}"/>
+                            <DataGridTemplateColumn Header="Location"  CellTemplate="{StaticResource AccountLocationDataTemplate}"/>
+                            <DataGridTextColumn Header="Country" Binding="{Binding Country}"/>
+                        </DataGrid.Columns>
+                    </DataGrid>
+                    <ListView Grid.Column="10" Grid.ColumnSpan="2" Grid.Row="2" Grid.RowSpan="2" Margin="5">
+                        <ListView.View>
+                            <GridView>
+                                <GridViewColumn>
+                                    <GridViewColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <Button Content="X" Width="25" Foreground="Red" FontSize="18" HorizontalAlignment="Center"/>
+                                        </DataTemplate>
+                                    </GridViewColumn.CellTemplate>
+                                </GridViewColumn>
+                                <GridViewColumn Header="Type">
+                                    <GridViewColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <ComboBox/>
+                                        </DataTemplate>
+                                    </GridViewColumn.CellTemplate>
+                                </GridViewColumn>
+                                <GridViewColumn Header="Value">
+                                    <GridViewColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <TextBox/>
+                                        </DataTemplate>
+                                    </GridViewColumn.CellTemplate>
+                                </GridViewColumn>
+                            </GridView>
+                        </ListView.View>
+                    </ListView>
+                    <Canvas Grid.Column="8" Grid.ColumnSpan="2" Grid.Row="0" Grid.RowSpan="2">
+                        <Button Name="newAccountButton" Margin="50" Click="newAccountButton_Click">
+                            new Account
+                        </Button>
+                    </Canvas>
+                    <TextBlock Grid.Column="9" Grid.Row="1" Margin="5" FontSize="16" Text="Note" HorizontalAlignment="Right"/>
+                    <ComboBox Grid.Row="1" Grid.Column="10" VerticalAlignment="Top" Margin="5" FontSize="18" Grid.ColumnSpan="2" Text="{Binding Note,Mode=TwoWay}"/>
+                    <TextBox Name="ShvarsNameTextBox" Grid.Row="3" Grid.Column="4" Grid.ColumnSpan="4" Margin="5" FontSize="18" VerticalAlignment="Top" FlowDirection="RightToLeft" Text="{Binding ShvarsName, Mode=TwoWay}" LostFocus="HebrewControl_LostFocus" GotFocus="HebrewControl_GotFocus"/>
+                    <TextBlock Grid.Row="3" Grid.Column="8" Text="שווער'ס נאמען"/>
+                    <TextBox Name="FathersNameTextBox" Grid.Row="2" Grid.Column="4" Grid.ColumnSpan="4" Margin="5" FontSize="18" VerticalAlignment="Top" FlowDirection="RightToLeft" Text="{Binding FathersName, Mode=TwoWay}" LostFocus="HebrewControl_LostFocus" GotFocus="HebrewControl_GotFocus"/>
+                    <TextBlock Grid.Row="2" Grid.Column="8" Text="טאטע'ס נאמען"/>
+                </Grid>
+            </TabItem>
+            <TabItem Header="Pledge/Charges" Margin="0,0,0,0" HeaderTemplate="{StaticResource TabItemHeader}">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Text="All Charges"/>
+                        <RadioButton GroupName="Sort" VerticalAlignment="Center"/>
+                        <TextBlock Text="Not Paid Charges"/>
+                        <RadioButton GroupName="Sort" VerticalAlignment="Center"/>
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal" Margin="0" HorizontalAlignment="Center">
+                        <TextBlock Text="test"/>
+                        <TextBlock/>
+                        <TextBlock/>
+                    </StackPanel>
+                    <DataGrid Name="PledgeDataGrid" ItemsSource="{Binding Pledges}" AutoGenerateColumns="False" MaxHeight="425" InitializingNewItem="PledgeDataGrid_InitializingNewItem" LoadingRow="PledgeDataGrid_LoadingRow" PreviewKeyDown="PledgeDataGrid_PreviewKeyDown">
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Header="Charge #" IsReadOnly="True" Binding="{Binding PledgeId}"/>
+                            <DataGridTemplateColumn Header="Campaign" CellTemplate="{StaticResource PledgeCampaignDataTemplate}"/>
+                            <DataGridTemplateColumn Header="Date Enterd">
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <DatePicker Text="{Binding DateEnterd,Mode=TwoWay}"/>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+                            <DataGridTextColumn Header="Amount" Binding="{Binding Amount}"/>
+                            <DataGridTextColumn Header="     Paid" MinWidth="100" IsReadOnly="True" Binding="{Binding PaidString}"/>
+                            <DataGridTextColumn Header="    Balance" MinWidth="100" IsReadOnly="True" Binding="{Binding BalanceString}"/>
+                            <DataGridTextColumn Header="   Running" MinWidth="100" IsReadOnly="True" Binding="{Binding Running}"/>
+                            <DataGridTemplateColumn Header="         Note" CellTemplate="{StaticResource PledgeNoteDataTemplate}"/>
+                        </DataGrid.Columns>
+                    </DataGrid>
+                </Grid>
+            </TabItem>
+            <TabItem Header="Donation/Payment" HeaderTemplate="{StaticResource TabItemHeader}">
+                <DataGrid Name="PaymentDataGrid" ItemsSource="{Binding Payments}" MaxHeight="425" AutoGenerateColumns="False" InitializingNewItem="PaymentDataGrid_InitializingNewItem" PreviewKeyDown="PaymentDataGrid_PreviewKeyDown">
+                    <DataGrid.Columns>
+                        <DataGridTextColumn Header="Payment #" IsReadOnly="True" Binding="{Binding PaymentId}"/>
+                        <DataGridTemplateColumn Header="Date" MinWidth="75">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <DatePicker Text="{Binding Date}"/>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+                        <DataGridTemplateColumn Header="Campaign" MinWidth="150">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <ComboBox Name="PaymentCampaignComboBox" Text="{Binding PaymentCampaign}" MinWidth="250" DisplayMemberPath="Campaign1" Loaded="PaymentCampaignComboBox_Loaded" SelectionChanged="PaymentCampaignComboBox_SelectionChanged"/>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+                        <DataGridTemplateColumn Header="Type" MinWidth="100">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <ComboBox/>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+                        <DataGridTextColumn Header="Amount" Binding="{Binding Amount_String}" MinWidth="75"/>
+                        <DataGridTemplateColumn Header="Apply" MinWidth="100">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <Button Content="Apply" Name="ApplyButton" IsEnabled="True" Click="ApplyButton_Click"/>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+                        <DataGridTemplateColumn Header="Note" MinWidth="100">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <ComboBox/>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+                    </DataGrid.Columns>
+                </DataGrid>
+            </TabItem>
+            <TabItem Name="SettingTabItem" Header="Settings" HeaderTemplate="{StaticResource TabItemHeader}" DataContext="accountManager">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="250"/>
+                        <ColumnDefinition Width="200"/>
+                        <ColumnDefinition Width="225"/>
+                        <ColumnDefinition Name="FourthColumn" Width="205"/>
+                        <ColumnDefinition Width="200"/>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition/>
+                        <RowDefinition/>
+                    </Grid.RowDefinitions>
+                    <StackPanel>
+                        <TextBlock Text="Campaign's"/>
+                        <DataGrid Name="SettingCampaignsDataGrid" Margin="10" ItemsSource="{Binding Campaigns}" InitializingNewItem="SettingCampaignsDataGrid_InitializingNewItem" AutoGenerateColumns="False">
+                            <DataGrid.Columns>
+                                <DataGridTextColumn Header="Campaign" Width="100" Binding="{Binding Campaign1}"/>
+                                <DataGridTemplateColumn Header="Default">
+                                    <DataGridTemplateColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <CheckBox Name="CampaignIsDefaultCheckBox" IsChecked="{Binding IsDefault}" Width="125" Click="CampaignIsDefaultCheckBox_Click" />
+                                        </DataTemplate>
+                                    </DataGridTemplateColumn.CellTemplate>
+                                </DataGridTemplateColumn>
+                            </DataGrid.Columns>
+                        </DataGrid>
+                    </StackPanel>
+                    <StackPanel Grid.Column="1">
+                        <TextBlock Text="Paying Types"/>
+                        <DataGrid Name="SettingPayingTypesDataGrid" Margin="10" ItemsSource="{Binding Types}" InitializingNewItem="SettingCampaignsDataGrid_InitializingNewItem" AutoGenerateColumns="False">
+                            <DataGrid.Columns>
+                                <DataGridTextColumn Header="Type" Width="100" Binding="{Binding Campaign}"/>
+                                <DataGridTextColumn Header="ID" Width="40"/>
+                            </DataGrid.Columns>
+                        </DataGrid>
+                    </StackPanel>
+                    <StackPanel Grid.Column="2">
+                        <TextBlock Text="Notes"/>
+                        <DataGrid Name="NotesDataGrid" Margin="10" ItemsSource="{Binding Notes}" InitializingNewItem="NotesDataGrid_InitializingNewItem" AutoGenerateColumns="False">
+                            <DataGrid.Columns>
+                                <DataGridTextColumn Header="Note" Width="200" Binding="{Binding Note1}"/>
+                            </DataGrid.Columns>
+                        </DataGrid>
+                    </StackPanel>
+                    <StackPanel Grid.Column="3">
+                        <TextBlock Text="Locations"/>
+                        <DataGrid Name="LocationDataGrid" Margin="10" ItemsSource="{Binding Locations}" InitializingNewItem="LocationDataGrid_InitializingNewItem" AutoGenerateColumns="False">
+                            <DataGrid.Columns>
+                                <DataGridTextColumn Header="Location" Width="{Binding ElementName=FourthColumn,Path=Width.Value}" Binding="{Binding Location1}"/>
+                            </DataGrid.Columns>
+                        </DataGrid>
+                    </StackPanel>
+                    <StackPanel Grid.Column="4">
+                        <TextBlock Text="Phone Type's"/>
+                        <DataGrid Name="PhoneTypeDataGrid" Margin="10" ItemsSource="{Binding Locations}" InitializingNewItem="LocationDataGrid_InitializingNewItem" AutoGenerateColumns="False">
+                            <DataGrid.Columns>
+                                <DataGridTextColumn Header="Type" Width="{Binding ElementName=FourthColumn,Path=Width.Value}" Binding="{Binding Location1}"/>
+                            </DataGrid.Columns>
+                        </DataGrid>
+                    </StackPanel>
+                </Grid>
+            </TabItem>
+        </TabControl>
+
+    </Grid>
+</Window>
